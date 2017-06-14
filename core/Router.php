@@ -2,6 +2,9 @@
 
 namespace Core;
 
+/**
+ * Class Router
+ */
 class Router
 {
     const ROUTE_KEY_ROOT_PATH = '_rootPath';
@@ -17,7 +20,7 @@ class Router
 
     /**
      * Router constructor.
-     * @param $appRoot
+     * @param string $appRoot
      */
     public function __construct($appRoot)
     {
@@ -72,7 +75,7 @@ class Router
     /**
      * Finds a route object matching a given route string.
      *
-     * @param $requestedRoute
+     * @param string $requestedRoute
      * @return array|null
      */
     private function findMatchingRoute($requestedRoute)

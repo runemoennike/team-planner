@@ -25,7 +25,7 @@ class SkillRepository extends AbstractRepository
     /**
      * Find all by person ID.
      *
-     * @param $personId
+     * @param int $personId
      * @return Skill[]
      */
     public function findAllByPerson($personId)
@@ -49,7 +49,7 @@ class SkillRepository extends AbstractRepository
     /**
      * Find all by project ID.
      *
-     * @param $projectId
+     * @param int $projectId
      * @return Skill[]
      */
     public function findAllByProject($projectId)

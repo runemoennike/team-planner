@@ -39,7 +39,7 @@ class PersonRepository extends AbstractRepository
     /**
      * Find by ID.
      *
-     * @param $id
+     * @param int $id
      * @return Person
      */
     public function find($id)
@@ -76,7 +76,7 @@ class PersonRepository extends AbstractRepository
     /**
      * Find all by project ID.
      *
-     * @param $projectId
+     * @param int $projectId
      * @return array
      */
     public function findAllByProject($projectId)

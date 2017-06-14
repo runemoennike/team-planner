@@ -2,9 +2,9 @@
 
 namespace App\Model\Entity;
 
+use mysqli_stmt;
 use App\Model\Entity\Skill;
 use App\Model\Entity\Person;
-use mysqli_stmt;
 
 /**
  * Class Project
@@ -53,7 +53,7 @@ class Project
     /**
      * Determines whether this project has a given skill.
      *
-     * @param $skillId
+     * @param int $skillId
      * @return bool
      */
     public function hasSkill($skillId)
@@ -72,7 +72,7 @@ class Project
     /**
      * Determines whether this project has a given person.
      *
-     * @param $personId
+     * @param int $personId
      * @return bool
      */
     public function hasPerson($personId)
@@ -91,7 +91,7 @@ class Project
     /**
      * Determines whether this a skill is covered by the manning of this project.
      *
-     * @param $skillId
+     * @param int $skillId
      * @return bool
      */
     public function isSkillCovered($skillId)
@@ -110,7 +110,7 @@ class Project
     /**
      * Count how many times a given skill is covered by the current manning.
      *
-     * @param $skillId
+     * @param int $skillId
      * @return int
      */
     public function countSkillCoverage($skillId)
@@ -130,7 +130,7 @@ class Project
 
     /**
      * Calculates a number that indicates how well this project is manned.
-     * Optimal is 100.
+     * Optimal score is 100.
      *
      * @return int;
      */

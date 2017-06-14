@@ -7,11 +7,10 @@ namespace Core;
  */
 class InputParsing
 {
-
     /**
      * Cleans up user input.
      *
-     * @param $unsafeStr
+     * @param string $unsafeStr
      * @return string
      */
     public static function cleanText($unsafeStr)

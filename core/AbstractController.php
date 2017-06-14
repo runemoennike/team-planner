@@ -4,14 +4,14 @@ namespace Core;
 
 abstract class AbstractController
 {
-    private $masterPagePath;
+    private $layoutPagePath;
     private $rootPath;
     private $content;
     private $appRoot;
 
     /**
      * AbstractController constructor.
-     * @param $appRoot
+     * @param string $appRoot
      */
     function __construct($appRoot)
     {
@@ -21,7 +21,7 @@ abstract class AbstractController
     /**
      * Sets the root path for this controller's component.
      *
-     * @param $path
+     * @param string $path
      */
     public function setRootPath($path)
     {
@@ -31,29 +31,29 @@ abstract class AbstractController
     /**
      * Sets the page that wraps the content.
      *
-     * @param $path
+     * @param string $layoutFilename
      */
-    protected function setLayoutPage($path)
+    protected function setLayoutPage($layoutFilename)
     {
-        $this->masterPagePath = $this->appRoot.'/'.$path;
+        $this->layoutPagePath = $this->appRoot.'/'.$layoutFilename;
     }
 
     /**
      * Performs the rendering of a given view file.
      *
-     * @param $view
+     * @param string $viewFilename
      */
-    protected function render($view)
+    protected function render($viewFilename)
     {
-        $viewPath = $this->rootPath.'/'.$view;
+        $viewPath = $this->rootPath.'/'.$viewFilename;
 
         // Capture view.
         ob_start();
         require($viewPath);
         $this->content = ob_get_clean();
 
-        // Invoke master page.
-        require($this->masterPagePath);
+        // Invoke layout page.
+        require($this->layoutPagePath);
     }
 
     protected function redirect($url)

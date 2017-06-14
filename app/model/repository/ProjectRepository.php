@@ -2,8 +2,8 @@
 
 namespace App\Model\Repository;
 
-use App\Model\Entity\Project;
 use Core\AbstractRepository;
+use App\Model\Entity\Project;
 
 /**
  * Class ProjectRepository
@@ -38,7 +38,7 @@ class ProjectRepository extends AbstractRepository
     /**
      * Find by ID.
      *
-     * @param $id
+     * @param int $id
      * @return Project
      */
     public function find($id)

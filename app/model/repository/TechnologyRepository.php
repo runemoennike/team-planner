@@ -24,7 +24,7 @@ class TechnologyRepository extends AbstractRepository
     /**
      * Find all by person ID.
      *
-     * @param $personId
+     * @param int $personId
      * @return Technology[]
      */
     public function findAllByPerson($personId)

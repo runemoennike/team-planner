@@ -2,9 +2,9 @@
 
 namespace App\Components\Projects;
 
+use Core\AbstractController;
 use App\Model\Repository\ProjectRepository;
 use App\Model\Repository\PersonRepository;
-use Core\AbstractController;
 
 class ManningController extends AbstractController
 {

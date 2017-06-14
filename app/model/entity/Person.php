@@ -2,9 +2,9 @@
 
 namespace App\Model\Entity;
 
+use mysqli_stmt;
 use App\Model\Entity\Skill;
 use App\Model\Entity\Technology;
-use mysqli_stmt;
 
 /**
  * Class Person
@@ -62,7 +62,7 @@ class Person
     /**
      * Determines whether this person has a given skill.
      *
-     * @param $skillId
+     * @param int $skillId
      * @return bool
      */
     public function hasSkill($skillId)
@@ -81,7 +81,7 @@ class Person
     /**
      * Determines whether this person has a given technology.
      *
-     * @param $technologyId
+     * @param int $technologyId
      * @return bool
      */
     public function hasTechnology($technologyId)
