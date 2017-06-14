@@ -2,7 +2,6 @@
 
 namespace App\Model\Repository;
 
-use mysqli_stmt;
 use Core\AbstractRepository;
 use App\Model\Entity\Person;
 use App\Model\Entity\Technology;
@@ -26,7 +25,7 @@ class TechnologyRepository extends AbstractRepository
      * Find all by person ID.
      *
      * @param $personId
-     * @return array
+     * @return Technology[]
      */
     public function findAllByPerson($personId)
     {

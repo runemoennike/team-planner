@@ -1,4 +1,9 @@
-<h1>Editing person</h1>
+<h1><?php echo empty($this->person->id) ? 'Add person' : 'Edit person' ?></h1>
+
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="<?php echo URL_BASE.'people/list' ?>">People</a></li>
+</ul>
 
 <form method="post" enctype="multipart/form-data">
     <div>

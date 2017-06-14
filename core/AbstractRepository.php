@@ -38,7 +38,7 @@ abstract class AbstractRepository
      * Find by ID.
      *
      * @param $id
-     * @return static
+     * @return mixed
      */
     public function find($id)
     {

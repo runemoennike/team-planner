@@ -2,16 +2,14 @@
 
 namespace App\Components\People;
 
+use Core\AbstractController;
+use Core\InputParsing;
 use App\Model\Repository\PersonRepository;
 use App\Model\Repository\SkillRepository;
 use App\Model\Repository\TechnologyRepository;
-use Core\AbstractController;
-use Core\InputParsing;
 
 class PeopleController extends AbstractController
 {
-    protected $hasSubmitted = false;
-
     /**
      * List people.
      */
@@ -28,7 +26,7 @@ class PeopleController extends AbstractController
     }
 
     /**
-     * Edit a person.
+     * Edit/add a person.
      */
     public function editAction() {
         // Input parameters.
@@ -84,7 +82,7 @@ class PeopleController extends AbstractController
         }
 
         // Show form.
-        $this->pageTitle = 'Edit person';
+        $this->pageTitle = empty($personId) ? 'Add person' : 'Edit person';
         $this->person = $person;
         $this->skills = $skillRepository->findAll();
         $this->technologies = $technologyRepository->findAll();

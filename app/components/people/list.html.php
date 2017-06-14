@@ -1,7 +1,9 @@
 <h1>People</h1>
 
-<a href="/">Home</a>
-<a href="<?php echo URL_BASE.'people/add' ?>">Add new person</a>
+<ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="<?php echo URL_BASE.'people/add' ?>">Add new person</a></li>
+</ul>
 
 <table>
     <thead>
@@ -17,9 +19,15 @@
     <tbody>
         <?php foreach($this->people as $person) : ?>
             <tr>
-                <td><img src="uploads/<?php echo $person->id ?>.jpeg" style="width:50px;height:50px;"></td>
-                <td><?php echo $person->name ?></td>
-                <td><?php echo $person->education ?></td>
+                <td>
+                    <img src="uploads/<?php echo $person->id ?>.jpeg" style="width:50px;height:50px;">
+                </td>
+                <td>
+                    <?php echo $person->name ?>
+                </td>
+                <td>
+                    <?php echo $person->education ?>
+                </td>
                 <td>
                     <?php if(!empty($person->skills)) : ?>
                         <?php foreach($person->skills as $skill) : ?>

@@ -2,8 +2,8 @@
 
 namespace App\Model\Repository;
 
-use mysqli_stmt;
 use Core\AbstractRepository;
+use App\Model\Entity\Project;
 use App\Model\Entity\Person;
 
 /**
@@ -11,7 +11,10 @@ use App\Model\Entity\Person;
  */
 class PersonRepository extends AbstractRepository
 {
+    /** @var SkillRepository */
     private $skillRepository;
+
+    /** @var TechnologyRepository */
     private $technologyRepository;
 
     /**
@@ -54,12 +57,44 @@ class PersonRepository extends AbstractRepository
     /**
      * Find all.
      *
-     * @return array
+     * @return Person[]
      */
     public function findAll()
     {
         /** @var Person[] $collection */
         $collection = parent::findAll();
+
+        // Eager load skills and technologies.
+        foreach($collection as $entity) {
+            $entity->skills = $this->skillRepository->findAllByPerson($entity->id);
+            $entity->technologies = $this->technologyRepository->findAllByPerson($entity->id);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * Find all by project ID.
+     *
+     * @param $projectId
+     * @return array
+     */
+    public function findAllByProject($projectId)
+    {
+        $dbConnection = $this->getConnection();
+
+        // Query.
+        $query = $dbConnection->prepare('
+            SELECT '.Person::SELECT_STRING.' 
+            FROM '.Person::TABLE_NAME.' '.Person::TABLE_ALIAS.'
+            INNER JOIN '.Project::PERSON_MAPPING_TABLE_NAME.' '.Project::PERSON_MAPPING_TABLE_ALIAS.' 
+                ON '.Project::PERSON_MAPPING_TABLE_ALIAS.'.`person_id` = '.Person::TABLE_ALIAS.'.`id`
+            WHERE '.Project::PERSON_MAPPING_TABLE_ALIAS.'.`project_id` = ?
+        ');
+        $query->bind_param('i', $projectId);
+
+        // Fetch.
+        $collection = $this->fetchAllFromQuery($query);
 
         // Eager load skills and technologies.
         foreach($collection as $entity) {

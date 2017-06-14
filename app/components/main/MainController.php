@@ -2,18 +2,12 @@
 
 namespace App\Components\Main;
 
-use App\Model\Repository\PersonRepository;
-use App\Model\Repository\SkillRepository;
-use App\Model\Repository\TechnologyRepository;
 use Core\AbstractController;
-use Core\InputParsing;
 
 class MainController extends AbstractController
 {
-    protected $hasSubmitted = false;
-
     /**
-     * List people.
+     * Home.
      */
     public function homeAction() {
         // Data.
