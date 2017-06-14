@@ -5,6 +5,7 @@ namespace Core;
 class Router
 {
     const ROUTE_KEY_ROOT_PATH = '_rootPath';
+    const ROUTE_KEY_NAMESPACE = 'namespace';
     const ROUTE_KEY_CONTROLLER = 'controller';
     const ROUTE_KEY_ACTION = 'action';
 
@@ -51,12 +52,14 @@ class Router
 
         if($route != null) {
             $controller = $route[self::ROUTE_KEY_CONTROLLER];
+            $namespace = $route[self::ROUTE_KEY_NAMESPACE];
             $action = $route[self::ROUTE_KEY_ACTION];
 
             require(sprintf('%s/%s.php', $route[self::ROUTE_KEY_ROOT_PATH], $controller));
 
             /** @var AbstractController $controllerInstance */
-            $controllerInstance = new $controller($this->appRoot);
+            $controllerFqn = $namespace .'\\'.$controller;
+            $controllerInstance = new $controllerFqn($this->appRoot);
             $controllerInstance->setRootPath($route[self::ROUTE_KEY_ROOT_PATH]);
 
             $controllerInstance->$action();

@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Components\People;
+
 use App\Model\Repository\PersonRepository;
 use App\Model\Repository\SkillRepository;
 use App\Model\Repository\TechnologyRepository;
