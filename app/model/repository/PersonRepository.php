@@ -122,16 +122,4 @@ class PersonRepository extends AbstractRepository
             $query->execute();
         }
     }
-
-    /**
-     * @param mysqli_stmt $query
-     * @return Person
-     */
-    private function bindResult($query): Person
-    {
-        $entity = new Person();
-        $query->bind_result($entity->id, $entity->name, $entity->email, $entity->phone, $entity->education, $entity->hiredYear);
-
-        return $entity;
-    }
 }

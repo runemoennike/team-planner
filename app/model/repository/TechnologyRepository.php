@@ -41,22 +41,8 @@ class TechnologyRepository extends AbstractRepository
             WHERE '.Person::TECHNOLOGY_MAPPING_TABLE_ALIAS.'.`person_id` = ?
         ');
         $query->bind_param('i', $personId);
-        $query->execute();
-        $query->store_result();
 
         // Fetch.
-        $collection = [];
-        $reading = true;
-
-        while($reading) {
-            $entity = Technology::instantiateWithBindings($query);
-
-            if($reading = $query->fetch())
-            {
-                $collection[] = $entity;
-            }
-        }
-
-        return $collection;
+        return $this->fetchAllFromQuery($query);
     }
 }

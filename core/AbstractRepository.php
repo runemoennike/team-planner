@@ -3,6 +3,7 @@
 namespace Core;
 
 use mysqli;
+use mysqli_stmt;
 
 /**
  * Class AbstractRepository
@@ -82,6 +83,18 @@ abstract class AbstractRepository
             SELECT '. $selectString .'
             FROM '. $tableName .' '. $tableAlias .'
         ');
+
+        // Fetch.
+        return $this->fetchAllFromQuery($query);
+    }
+
+    /**
+     * @param mysqli_stmt $query
+     * @return array
+     */
+    protected function fetchAllFromQuery($query): array
+    {
+        // Execute.
         $query->execute();
         $query->store_result();
 
@@ -89,11 +102,10 @@ abstract class AbstractRepository
         $collection = [];
         $reading = true;
 
-        while($reading) {
+        while ($reading) {
             $entity = call_user_func([$this->getEntityClass(), 'instantiateWithBindings'], $query);
 
-            if($reading = $query->fetch())
-            {
+            if ($reading = $query->fetch()) {
                 $collection[] = $entity;
             }
         }

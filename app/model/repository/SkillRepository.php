@@ -41,22 +41,8 @@ class SkillRepository extends AbstractRepository
             WHERE '.Person::SKILL_MAPPING_TABLE_ALIAS.'.`person_id` = ?
         ');
         $query->bind_param('i', $personId);
-        $query->execute();
-        $query->store_result();
 
         // Fetch.
-        $collection = [];
-        $reading = true;
-
-        while($reading) {
-            $entity = Skill::instantiateWithBindings($query);
-
-            if($reading = $query->fetch())
-            {
-                $collection[] = $entity;
-            }
-        }
-
-        return $collection;
+        return $this->fetchAllFromQuery($query);
     }
 }
