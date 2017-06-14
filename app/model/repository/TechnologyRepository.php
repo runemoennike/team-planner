@@ -13,63 +13,13 @@ use App\Model\Entity\Technology;
 class TechnologyRepository extends AbstractRepository
 {
     /**
-     * Find by ID.
+     * Return the class of the entity managed by the repository.
      *
-     * @param $id
-     * @return Technology
+     * @return string
      */
-    public function find($id)
+    protected function getEntityClass()
     {
-        $dbConnection = $this->getConnection();
-
-        // Query.
-        $query = $dbConnection->prepare('
-            SELECT '.Technology::SELECT_STRING.'
-            FROM '.Technology::TABLE_NAME.' t
-            WHERE t.`id` = ?
-        ');
-        $query->bind_param('i', $id);
-        $query->execute();
-        $query->store_result();
-
-        // Fetch.
-        $entity = $this->bindResult($query);
-        $query->fetch();
-
-        return $entity;
-    }
-
-    /**
-     * Find all.
-     *
-     * @return array
-     */
-    public function findAll()
-    {
-        $dbConnection = $this->getConnection();
-
-        // Query.
-        $query = $dbConnection->prepare('
-            SELECT '.Technology::SELECT_STRING.' 
-            FROM '.Technology::TABLE_NAME.' t
-        ');
-        $query->execute();
-        $query->store_result();
-
-        // Fetch.
-        $collection = [];
-        $reading = true;
-
-        while($reading) {
-            $entity = $this->bindResult($query);
-
-            if($reading = $query->fetch())
-            {
-                $collection[] = $entity;
-            }
-        }
-
-        return $collection;
+        return Technology::class;
     }
 
     /**
@@ -85,9 +35,10 @@ class TechnologyRepository extends AbstractRepository
         // Query.
         $query = $dbConnection->prepare('
             SELECT '.Technology::SELECT_STRING.' 
-            FROM '.Technology::TABLE_NAME.' t
-            INNER JOIN '.Person::TECHNOLOGY_MAPPING_TABLE_NAME.' ts ON ts.`technology_id` = t.`id`
-            WHERE ts.`person_id` = ?
+            FROM '.Technology::TABLE_NAME.' '.Technology::TABLE_ALIAS.'
+            INNER JOIN '.Person::TECHNOLOGY_MAPPING_TABLE_NAME.' '.Person::TECHNOLOGY_MAPPING_TABLE_ALIAS.' 
+                ON '.Person::TECHNOLOGY_MAPPING_TABLE_ALIAS.'.`technology_id` = '.Technology::TABLE_ALIAS.'.`id`
+            WHERE '.Person::TECHNOLOGY_MAPPING_TABLE_ALIAS.'.`person_id` = ?
         ');
         $query->bind_param('i', $personId);
         $query->execute();
@@ -98,7 +49,7 @@ class TechnologyRepository extends AbstractRepository
         $reading = true;
 
         while($reading) {
-            $entity = $this->bindResult($query);
+            $entity = Technology::instantiateWithBindings($query);
 
             if($reading = $query->fetch())
             {
@@ -107,17 +58,5 @@ class TechnologyRepository extends AbstractRepository
         }
 
         return $collection;
-    }
-
-    /**
-     * @param mysqli_stmt $query
-     * @return Technology
-     */
-    private function bindResult($query): Technology
-    {
-        $entity = new Technology();
-        $query->bind_result($entity->id, $entity->name);
-
-        return $entity;
     }
 }

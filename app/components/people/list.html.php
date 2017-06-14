@@ -1,5 +1,6 @@
 <h1>People</h1>
 
+<a href="/">Home</a>
 <a href="<?php echo URL_BASE.'people/add' ?>">Add new person</a>
 
 <table>

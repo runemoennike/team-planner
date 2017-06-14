@@ -13,63 +13,13 @@ use App\Model\Entity\Person;
 class SkillRepository extends AbstractRepository
 {
     /**
-     * Find by ID.
+     * Return the class of the entity managed by the repository.
      *
-     * @param $id
-     * @return Skill
+     * @return string
      */
-    public function find($id)
+    protected function getEntityClass()
     {
-        $dbConnection = $this->getConnection();
-
-        // Query.
-        $query = $dbConnection->prepare('
-            SELECT '.Skill::SELECT_STRING.'
-            FROM '.Skill::TABLE_NAME.' s
-            WHERE s.`id` = ?
-        ');
-        $query->bind_param('i', $id);
-        $query->execute();
-        $query->store_result();
-
-        // Fetch.
-        $entity = $this->bindResult($query);
-        $query->fetch();
-
-        return $entity;
-    }
-
-    /**
-     * Find all.
-     *
-     * @return array
-     */
-    public function findAll()
-    {
-        $dbConnection = $this->getConnection();
-
-        // Query.
-        $query = $dbConnection->prepare('
-            SELECT '.Skill::SELECT_STRING.' 
-            FROM '.Skill::TABLE_NAME.' s
-        ');
-        $query->execute();
-        $query->store_result();
-
-        // Fetch.
-        $collection = [];
-        $reading = true;
-
-        while($reading) {
-            $entity = $this->bindResult($query);
-
-            if($reading = $query->fetch())
-            {
-                $collection[] = $entity;
-            }
-        }
-
-        return $collection;
+        return Skill::class;
     }
 
     /**
@@ -85,9 +35,10 @@ class SkillRepository extends AbstractRepository
         // Query.
         $query = $dbConnection->prepare('
             SELECT '.Skill::SELECT_STRING.' 
-            FROM '.Skill::TABLE_NAME.' s
-            INNER JOIN '.Person::SKILL_MAPPING_TABLE_NAME.' ps ON ps.`skill_id` = s.`id`
-            WHERE ps.`person_id` = ?
+            FROM '.Skill::TABLE_NAME.' '.Skill::TABLE_ALIAS.'
+            INNER JOIN '.Person::SKILL_MAPPING_TABLE_NAME.' '.Person::SKILL_MAPPING_TABLE_ALIAS.' 
+                ON '.Person::SKILL_MAPPING_TABLE_ALIAS.'.`skill_id` = '.Skill::TABLE_ALIAS.'.`id`
+            WHERE '.Person::SKILL_MAPPING_TABLE_ALIAS.'.`person_id` = ?
         ');
         $query->bind_param('i', $personId);
         $query->execute();
@@ -98,7 +49,7 @@ class SkillRepository extends AbstractRepository
         $reading = true;
 
         while($reading) {
-            $entity = $this->bindResult($query);
+            $entity = Skill::instantiateWithBindings($query);
 
             if($reading = $query->fetch())
             {
@@ -107,17 +58,5 @@ class SkillRepository extends AbstractRepository
         }
 
         return $collection;
-    }
-
-    /**
-     * @param mysqli_stmt $query
-     * @return Skill
-     */
-    private function bindResult($query): Skill
-    {
-        $entity = new Skill();
-        $query->bind_result($entity->id, $entity->name);
-
-        return $entity;
     }
 }

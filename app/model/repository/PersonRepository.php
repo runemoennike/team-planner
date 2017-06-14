@@ -24,6 +24,16 @@ class PersonRepository extends AbstractRepository
     }
 
     /**
+     * Return the class of the entity managed by the repository.
+     *
+     * @return string
+     */
+    protected function getEntityClass()
+    {
+        return Person::class;
+    }
+
+    /**
      * Find by ID.
      *
      * @param $id
@@ -31,21 +41,8 @@ class PersonRepository extends AbstractRepository
      */
     public function find($id)
     {
-        $dbConnection = $this->getConnection();
-
-        // Query.
-        $query = $dbConnection->prepare('
-            SELECT '.Person::SELECT_STRING.'
-            FROM '.Person::TABLE_NAME.' p
-            WHERE p.`id` = ?
-        ');
-        $query->bind_param('i', $id);
-        $query->execute();
-        $query->store_result();
-
-        // Fetch.
-        $entity = $this->bindResult($query);
-        $query->fetch();
+        /** @var Person $entity */
+        $entity = parent::find($id);
 
         // Eager load skills and technologies.
         $entity->skills = $this->skillRepository->findAllByPerson($entity->id);
@@ -61,31 +58,13 @@ class PersonRepository extends AbstractRepository
      */
     public function findAll()
     {
-        $dbConnection = $this->getConnection();
+        /** @var Person[] $collection */
+        $collection = parent::findAll();
 
-        // Query.
-        $query = $dbConnection->prepare('
-            SELECT '.Person::SELECT_STRING.' 
-            FROM '.Person::TABLE_NAME.' p
-        ');
-        $query->execute();
-        $query->store_result();
-
-        // Fetch.
-        $collection = [];
-        $reading = true;
-
-        while($reading) {
-            $entity = $this->bindResult($query);
-
-            if($reading = $query->fetch())
-            {
-                // Eager load skills and technologies.
-                $entity->skills = $this->skillRepository->findAllByPerson($entity->id);
-                $entity->technologies = $this->technologyRepository->findAllByPerson($entity->id);
-
-                $collection[] = $entity;
-            }
+        // Eager load skills and technologies.
+        foreach($collection as $entity) {
+            $entity->skills = $this->skillRepository->findAllByPerson($entity->id);
+            $entity->technologies = $this->technologyRepository->findAllByPerson($entity->id);
         }
 
         return $collection;
@@ -154,13 +133,5 @@ class PersonRepository extends AbstractRepository
         $query->bind_result($entity->id, $entity->name, $entity->email, $entity->phone, $entity->education, $entity->hiredYear);
 
         return $entity;
-    }
-
-    /**
-     * @param mysqli_stmt $query
-     * @param $entity Person
-     */
-    private function bindParam($query, $entity)
-    {
     }
 }
